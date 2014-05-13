@@ -16,6 +16,7 @@ import php.runtime.memory.ObjectMemory;
 import php.runtime.memory.ReferenceMemory;
 import php.runtime.memory.StringMemory;
 import php.runtime.reflection.*;
+import php.runtime.util.JVMStackTracer;
 
 final public class InvokeHelper {
 
@@ -111,6 +112,35 @@ final public class InvokeHelper {
                     trace.getStartLine() + 1,
                     trace.getStartPosition() + 1
             );
+        }
+    }
+
+    public static void checkReturnType(Memory value, String expectedType,
+                                       Environment env, TraceInfo trace) {
+        HintType hint = HintType.of(expectedType);
+        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+        StackTraceElement e = stack[2];
+        JVMStackTracer.Item item = new JVMStackTracer.Item(env.scope.getClassLoader(), e);
+        if (hint != null) {
+            if (!ParameterEntity.checkTypeHinting(env, value, hint)) {
+                env.error(trace,
+                        ErrorType.E_ERROR,
+                        "the function %s() was expected to return an %s and returned an %s",
+                        item.getSignature(),
+                        expectedType,
+                        value.getRealType().toString()
+                );
+            }
+        } else {
+            if (!value.instanceOf(expectedType)) {
+                env.error(trace,
+                        ErrorType.E_ERROR,
+                        "the function %s() was expected to return an %s and returned an %s",
+                        item.getSignature(),
+                        expectedType,
+                        value.getRealType().toString()
+                );
+            }
         }
     }
 

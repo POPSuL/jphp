@@ -14,6 +14,7 @@ abstract public class AbstractFunctionEntity extends Entity {
     protected boolean isEmpty = false;
     protected DocumentComment docComment;
     protected boolean returnReference;
+    protected String returnType;
     public ParameterEntity[] parameters;
 
     protected Memory result;
@@ -49,6 +50,14 @@ abstract public class AbstractFunctionEntity extends Entity {
 
     public Memory getResult() {
         return result;
+    }
+
+    public void setReturnType(String type) {
+        returnType = type;
+    }
+
+    public String getReturnType() {
+        return returnType;
     }
 
     public void setResult(Memory result) {

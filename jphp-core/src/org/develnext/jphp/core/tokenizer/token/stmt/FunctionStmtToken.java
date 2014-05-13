@@ -19,6 +19,7 @@ public class FunctionStmtToken extends StmtToken {
     protected boolean returnReference;
     protected List<ArgumentStmtToken> arguments;
     protected List<ArgumentStmtToken> uses;
+    protected String returnHint;
     protected BodyStmtToken body;
     protected boolean interfacable;
 
@@ -98,6 +99,14 @@ public class FunctionStmtToken extends StmtToken {
 
     public void setUses(List<ArgumentStmtToken> uses) {
         this.uses = uses;
+    }
+
+    public void setReturnType(String hint) {
+        returnHint = hint;
+    }
+
+    public String getReturnTypehint() {
+        return returnHint;
     }
 
     public boolean isReturnReference() {

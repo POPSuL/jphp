@@ -304,6 +304,10 @@ public class Environment {
         }
     }
 
+    public CallStackItem peekCall() {
+        return peekCall(0);
+    }
+
     public TraceInfo trace(){
         if (callStackTop <= 0)
             return TraceInfo.UNKNOWN;

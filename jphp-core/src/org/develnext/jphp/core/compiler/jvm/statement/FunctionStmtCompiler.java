@@ -30,6 +30,7 @@ public class FunctionStmtCompiler extends StmtCompiler<FunctionEntity> {
         entity.setModule(module);
         entity.setName(statement.getFulledName());
         entity.setReturnReference(statement.isReturnReference());
+        entity.setReturnType(statement.getReturnTypehint());
         entity.setInternalName(compiler.getModule().getInternalName() + "_func" + statement.getId());
         entity.setTrace(statement.toTraceInfo(compiler.getContext()));
 
@@ -47,6 +48,7 @@ public class FunctionStmtCompiler extends StmtCompiler<FunctionEntity> {
         methodToken.setFinal(true);
         methodToken.setStatic(true);
         methodToken.setReturnReference(entity.isReturnReference());
+        methodToken.setReturnType(entity.getReturnType());
         methodToken.setModifier(Modifier.PUBLIC);
         methodToken.setName(new NameToken(TokenMeta.of("__invoke")));
         token.setMethods(Arrays.asList(methodToken));

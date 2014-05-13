@@ -1,5 +1,6 @@
 package org.develnext.jphp.core.syntax.generators;
 
+import org.develnext.jphp.core.tokenizer.token.ColonToken;
 import php.runtime.common.HintType;
 import php.runtime.common.LangMode;
 import org.develnext.jphp.core.syntax.SyntaxAnalyzer;
@@ -40,6 +41,11 @@ public class FunctionGenerator extends Generator<FunctionStmtToken> {
         add("boolean");
     }};
 
+    protected final static Set<String> returnTypeHints = new HashSet<String>(){{
+        add("array");
+        add("callable");
+    }};
+
     @SuppressWarnings("unchecked")
     protected ArgumentStmtToken processArgument(ListIterator<Token> iterator){
         boolean isReference = false;
@@ -56,13 +62,10 @@ public class FunctionGenerator extends Generator<FunctionStmtToken> {
         if (next instanceof NameToken){
             String word = ((NameToken) next).getName().toLowerCase();
             if (scalarTypeHints.contains(word)
-                    || (analyzer.getLangMode() == LangMode.JPHP && jphp_scalarTypeHints.contains(word)))
+                    || (analyzer.getLangMode() == LangMode.JPHP && jphp_scalarTypeHints.contains(word))) {
                 hintType = HintType.of(word);
-            else {
-                hintType = analyzer.getLangMode() == LangMode.PHP && jphp_scalarTypeHints.contains(word)
-                        ? null : HintType.of(word);
-                if (hintType == null)
-                    hintTypeClass = analyzer.getRealName((NameToken)next);
+            } else {
+                hintTypeClass = analyzer.getRealName((NameToken)next);
             }
 
             next = nextToken(iterator);
@@ -158,6 +161,28 @@ public class FunctionGenerator extends Generator<FunctionStmtToken> {
         }
     }
 
+    protected void processReturnType(FunctionStmtToken result, ListIterator<Token> iterator) {
+        Token next = nextToken(iterator);
+        if (next instanceof ColonToken) {
+            next = nextToken(iterator);
+            String hintType = null;
+            if (next instanceof NameToken) {
+                String word = ((NameToken) next).getName().toLowerCase();
+                if (returnTypeHints.contains(word)
+                        || (analyzer.getLangMode() == LangMode.JPHP && jphp_scalarTypeHints.contains(word))) {
+                    hintType = word;
+                } else {
+                    hintType = analyzer.getRealName((NameToken)next).toName();
+                }
+                result.setReturnType(hintType);
+            } else {
+                unexpectedToken(next);
+            }
+        } else {
+            iterator.previous();
+        }
+    }
+
     protected void processBody(FunctionStmtToken result, ListIterator<Token> iterator){
         Token next = nextToken(iterator);
         if (isOpenedBrace(next, BraceExprToken.Kind.BLOCK)){
@@ -196,6 +221,7 @@ public class FunctionGenerator extends Generator<FunctionStmtToken> {
                 result.setNamespace(analyzer.getNamespace());
                 result.setName((NameToken)next);
                 processArguments(result, iterator);
+                processReturnType(result, iterator);
                 processBody(result, iterator);
 
                 result.setLabels(analyzer.getScope().getLabels());

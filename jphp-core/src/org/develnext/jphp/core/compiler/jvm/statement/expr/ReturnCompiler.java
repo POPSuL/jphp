@@ -40,7 +40,7 @@ public class ReturnCompiler extends BaseStatementCompiler<ReturnStmtToken> {
         else
             expr.writePopBoxing(false);
 
-        if (method.getEntity().isReturnReference()){
+        if (method.getEntity().isReturnReference()) {
             expr.writePushDup();
             expr.writePushEnv();
             expr.writePushTraceInfo(token);
@@ -50,10 +50,13 @@ public class ReturnCompiler extends BaseStatementCompiler<ReturnStmtToken> {
                     void.class,
                     Memory.class, Environment.class, TraceInfo.class
             );
-        } else
+
+        } else {
             expr.writePopImmutable();
+        }
 
         if (!method.getTryStack().empty()){
+
             LocalVariable variable = method.getLocalVariable("~result~");
             if (variable == null)
                 variable = method.addLocalVariable("~result~", null, Memory.class);
@@ -61,6 +64,20 @@ public class ReturnCompiler extends BaseStatementCompiler<ReturnStmtToken> {
             expr.writeVarStore(variable, false, false);
             add(new JumpInsnNode(GOTO, method.getTryStack().peek().getReturnLabel()));
         } else {
+
+            String typeHint = method.getEntity().getReturnType();
+            if (typeHint != null) {
+                expr.writePushDup();
+                expr.writePushConstString(typeHint);
+                expr.writePushEnv();
+                expr.writePushTraceInfo(token);
+                expr.writeSysStaticCall(
+                        InvokeHelper.class,
+                        "checkReturnType",
+                        Void.TYPE,
+                        Memory.class, String.class, Environment.class, TraceInfo.class);
+            }
+
             add(new InsnNode(ARETURN));
             //removeStackFrame();
             expr.stackPop();

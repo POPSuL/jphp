@@ -407,6 +407,7 @@ public class MethodStmtCompiler extends StmtCompiler<MethodEntity> {
             entity.setReturnReference(statement.isReturnReference());
             entity.setTrace(statement.toTraceInfo(compiler.getContext()));
             entity.setImmutable( statement.getArguments().isEmpty() );
+            entity.setReturnType(statement.getReturnTypehint());
 
             if (clazz.isSystem())
                 entity.setInternalName(entity.getName());

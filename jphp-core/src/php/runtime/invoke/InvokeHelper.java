@@ -269,7 +269,12 @@ final public class InvokeHelper {
         Memory[] passed = makeArguments(env, args, function.parameters, function.getName(), null, trace);
 
         Memory result = function.getImmutableResult();
-        if (result != null) return result;
+        if (result != null) {
+            if (function.getReturnType() != null) {
+                checkReturnType(result, function.getReturnType(), env, trace);
+            }
+            return result;
+        }
 
         if (trace != null && function.isUsesStackTrace())
             env.pushCall(trace, null, args, function.getName(), null, null);

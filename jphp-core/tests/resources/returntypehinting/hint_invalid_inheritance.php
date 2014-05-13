@@ -1,5 +1,5 @@
 --TEST--
-Test class type hinting
+Test invalid returntype inheritance
 --FILE--
 <?php
 
@@ -8,7 +8,7 @@ interface Hintable {
 }
 
 class Hinted implements Hintable {
-    public function hi1nt() : callable {
+    public function hint() : callable {
         $a = [];
         return $a;
     }
@@ -17,8 +17,6 @@ class Hinted implements Hintable {
 $a = new Hinted();
 var_dump($a->hint());
 
---EXPECT--
-array(0) {
-}
-array(0) {
-}
+--EXPECTF--
+
+Fatal error: Declaration of Hinted::hint() must be compatible with Hintable::hint() in %s on line %d, position %d

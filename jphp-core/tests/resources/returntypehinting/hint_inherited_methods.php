@@ -1,5 +1,5 @@
 --TEST--
-Test class type hinting
+Test returntype hinting inheritance
 --FILE--
 <?php
 

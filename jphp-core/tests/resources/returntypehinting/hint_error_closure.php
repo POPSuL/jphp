@@ -1,5 +1,5 @@
 --TEST--
-Test basic errors with type hinting
+Test closure hinting
 --FILE--
 <?php
 

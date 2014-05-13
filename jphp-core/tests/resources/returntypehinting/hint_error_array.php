@@ -12,4 +12,4 @@ testErrorArray();
 
 --EXPECTF--
 
-Fatal error: the function testErrorArray() was expected to return an array and returned an integer in %s on line %d, position %d
+Recoverable error: the function testErrorArray() was expected to return an array and returned an integer in %s on line %d, position %d

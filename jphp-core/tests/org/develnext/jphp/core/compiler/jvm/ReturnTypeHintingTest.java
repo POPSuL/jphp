@@ -31,6 +31,11 @@ public class ReturnTypeHintingTest extends JvmCompilerCase {
     }
 
     @Test
+    public void testMethodsInheritance(){
+        check("returntypehinting/hint_inherited_methods.php", false);
+    }
+
+    @Test
     public void testErrorArray(){
         check("returntypehinting/hint_error_array.php", true);
     }
@@ -38,6 +43,11 @@ public class ReturnTypeHintingTest extends JvmCompilerCase {
     @Test
     public void testErrorClosure(){
         check("returntypehinting/hint_error_closure.php", true);
+    }
+
+    @Test
+    public void testInvalidInheritance(){
+        check("returntypehinting/hint_invalid_inheritance.php", true);
     }
 
 }

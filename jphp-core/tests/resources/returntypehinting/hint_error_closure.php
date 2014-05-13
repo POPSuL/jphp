@@ -12,4 +12,4 @@ testErrorClosure();
 
 --EXPECTF--
 
-Fatal error: the function testErrorClosure() was expected to return an callable and returned an array in %s on line %d, position %d
+Recoverable error: the function testErrorClosure() was expected to return an callable and returned an array in %s on line %d, position %d

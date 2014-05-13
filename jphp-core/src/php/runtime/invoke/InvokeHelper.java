@@ -124,7 +124,7 @@ final public class InvokeHelper {
         if (hint != null) {
             if (!ParameterEntity.checkTypeHinting(env, value, hint)) {
                 env.error(trace,
-                        ErrorType.E_ERROR,
+                        ErrorType.E_RECOVERABLE_ERROR,
                         "the function %s() was expected to return an %s and returned an %s",
                         item.getSignature(),
                         expectedType,
@@ -134,7 +134,7 @@ final public class InvokeHelper {
         } else {
             if (!value.instanceOf(expectedType)) {
                 env.error(trace,
-                        ErrorType.E_ERROR,
+                        ErrorType.E_RECOVERABLE_ERROR,
                         "the function %s() was expected to return an %s and returned an %s",
                         item.getSignature(),
                         expectedType,

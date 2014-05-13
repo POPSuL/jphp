@@ -49,6 +49,7 @@ public class MethodEntity extends AbstractFunctionEntity {
         super(entity.getContext());
         setParameters(entity.parameters);
         setReturnReference(entity.isReturnReference());
+        setReturnType(entity.getReturnType());
         setDeprecated(entity.isDeprecated());
         setAbstract(false);
         setAbstractable(false);
@@ -59,6 +60,7 @@ public class MethodEntity extends AbstractFunctionEntity {
         super(entity.getContext());
         setParameters(entity.parameters);
         setReturnReference(entity.isReturnReference());
+        setReturnType(entity.getReturnType());
         setDeprecated(entity.isDeprecated());
         setAbstract(false);
         setAbstractable(false);
@@ -380,6 +382,9 @@ public class MethodEntity extends AbstractFunctionEntity {
                         param.type == null ? HintType.ANY : param.type
                 ).append("|").append(param.isReference ? "&" : "");
         }
+        if (returnType != null) {
+            sb.append("<").append(returnType);
+        }
         return signature = sb.toString();
     }
 
@@ -390,7 +395,7 @@ public class MethodEntity extends AbstractFunctionEntity {
             int cnt1 = parameters != null ? parameters.length : 0;
             int cnt2 = method.parameters != null ? method.parameters.length : 0;
 
-            return cnt1 == cnt2;
+            return cnt1 == cnt2 && (method.returnType == null ? returnType == null : method.returnType.equals(returnType));
         }
     }
 
@@ -501,6 +506,7 @@ public class MethodEntity extends AbstractFunctionEntity {
         methodEntity.setDocComment(getDocComment());
         methodEntity.setParameters(parameters);
         methodEntity.setReturnReference(isReturnReference());
+        methodEntity.setReturnType(returnType);
         methodEntity.setEmpty(isEmpty);
         methodEntity.setImmutable(isImmutable);
         methodEntity.setResult(result);

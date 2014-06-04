@@ -3,6 +3,7 @@ package php.runtime.lang;
 import php.runtime.annotation.Reflection;
 import php.runtime.env.Environment;
 import php.runtime.memory.ArrayMemory;
+import php.runtime.memory.ObjectMemory;
 import php.runtime.reflection.ClassEntity;
 
 import java.lang.ref.WeakReference;
@@ -76,5 +77,9 @@ abstract public class BaseObject implements IObject {
     @Override
     public void setAsMock() {
         __class__ = null;
+    }
+
+    public ObjectMemory toMemory() {
+        return new ObjectMemory(this);
     }
 }

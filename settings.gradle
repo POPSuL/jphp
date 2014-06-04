@@ -7,4 +7,6 @@ include 'jphp-core',
         'jphp-gen-api',
         'jphp-example-project',
         'jphp-scripting',
-        'jphp-scripting-example'
+        'jphp-scripting-example',
+        'jphp-jdbc-ext'
+

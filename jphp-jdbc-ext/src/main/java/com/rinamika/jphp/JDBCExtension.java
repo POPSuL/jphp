@@ -24,6 +24,7 @@ public class JDBCExtension extends Extension {
         registerNativeClass(scope, ConnectionWrapper.class);
         registerNativeClass(scope, DriverManagerWrapper.class);
         registerNativeClass(scope, DriverWrapper.class);
+        registerNativeClass(scope, ResultSetMetaDataWrapper.class);
         registerNativeClass(scope, ResultSetWrapper.class);
         registerNativeClass(scope, SavepointWrapper.class);
         registerNativeClass(scope, StatementWrapper.class);

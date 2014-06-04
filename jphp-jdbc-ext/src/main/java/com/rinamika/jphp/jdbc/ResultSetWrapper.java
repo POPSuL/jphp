@@ -10,30 +10,29 @@ import php.runtime.memory.StringMemory;
 import php.runtime.reflection.ClassEntity;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import static php.runtime.Memory.*;
-import static php.runtime.Memory.FALSE;
-import static php.runtime.Memory.TRUE;
-import static php.runtime.annotation.Reflection.Arg;
-import static php.runtime.annotation.Reflection.Signature;
+import static php.runtime.annotation.Reflection.*;
 import static php.runtime.common.HintType.*;
 
+@Name("java\\sql\\ResultSet")
 public class ResultSetWrapper extends BaseObject {
 
-    public static int CONCUR_READ_ONLY = ResultSet.CONCUR_READ_ONLY;
-    public static int CONCUR_UPDATABLE = ResultSet.CONCUR_UPDATABLE;
+    public static final int CONCUR_READ_ONLY = ResultSet.CONCUR_READ_ONLY;
+    public static final int CONCUR_UPDATABLE = ResultSet.CONCUR_UPDATABLE;
 
-    public static int HOLD_CURSORS_OVER_COMMIT = ResultSet.HOLD_CURSORS_OVER_COMMIT;
-    public static int CLOSE_CURSORS_AT_COMMIT = ResultSet.CLOSE_CURSORS_AT_COMMIT;
+    public static final int HOLD_CURSORS_OVER_COMMIT = ResultSet.HOLD_CURSORS_OVER_COMMIT;
+    public static final int CLOSE_CURSORS_AT_COMMIT = ResultSet.CLOSE_CURSORS_AT_COMMIT;
 
-    public static int FETCH_FORWARD = ResultSet.FETCH_FORWARD;
-    public static int FETCH_REVERSE = ResultSet.FETCH_REVERSE;
-    public static int FETCH_UNKNOWN = ResultSet.FETCH_UNKNOWN;
+    public static final int FETCH_FORWARD = ResultSet.FETCH_FORWARD;
+    public static final int FETCH_REVERSE = ResultSet.FETCH_REVERSE;
+    public static final int FETCH_UNKNOWN = ResultSet.FETCH_UNKNOWN;
 
-    public static int TYPE_FORWARD_ONLY = ResultSet.TYPE_FORWARD_ONLY;
-    public static int TYPE_SCROLL_INSENSITIVE = ResultSet.TYPE_SCROLL_INSENSITIVE;
-    public static int TYPE_SCROLL_SENSITIVE = ResultSet.TYPE_SCROLL_SENSITIVE;
+    public static final int TYPE_FORWARD_ONLY = ResultSet.TYPE_FORWARD_ONLY;
+    public static final int TYPE_SCROLL_INSENSITIVE = ResultSet.TYPE_SCROLL_INSENSITIVE;
+    public static final int TYPE_SCROLL_SENSITIVE = ResultSet.TYPE_SCROLL_SENSITIVE;
 
     private ResultSet mResultSet;
 
@@ -248,6 +247,17 @@ public class ResultSetWrapper extends BaseObject {
             DriverManagerWrapper.exception(env, e.getMessage());
         }
         return NULL;
+    }
+
+    @Signature
+    public Memory getMetaData(Environment env, Memory... args) {
+        try {
+            ResultSetMetaData rsmd = mResultSet.getMetaData();
+            return new ResultSetMetaDataWrapper(env, rsmd).toMemory();
+        } catch (SQLException e) {
+            DriverManagerWrapper.exception(env, e.getMessage());
+        }
+        return Memory.NULL;
     }
 
     @Signature

@@ -2,8 +2,6 @@ package com.rinamika.jphp.jdbc;
 
 import com.rinamika.jphp.util.MemoryUtil;
 import php.runtime.Memory;
-import php.runtime.annotation.Reflection;
-import php.runtime.common.HintType;
 import php.runtime.env.Environment;
 import php.runtime.lang.BaseObject;
 import php.runtime.memory.ArrayMemory;
@@ -18,7 +16,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
 
-@Reflection.Name("java\\sql\\DriverManager")
+import static php.runtime.annotation.Reflection.*;
+
+@Name("java\\sql\\DriverManager")
 public class DriverManagerWrapper extends BaseObject {
 
     private DriverManager mManager;
@@ -38,7 +38,7 @@ public class DriverManagerWrapper extends BaseObject {
         env.__throwException(exception);
     }
 
-    @Reflection.Signature({@Reflection.Arg(value = "driver", typeClass = "java\\sql\\Driver")})
+    @Signature({@Arg(value = "driver", typeClass = "java\\sql\\Driver")})
     public static Memory deregisterDriver(Environment env, Memory... args) {
         try {
             DriverWrapper wrapper = (DriverWrapper) ((ObjectMemory) args[0]).value;
@@ -49,9 +49,9 @@ public class DriverManagerWrapper extends BaseObject {
         return Memory.NULL;
     }
 
-    @Reflection.Signature({@Reflection.Arg(value = "url", type = HintType.STRING),
-        @Reflection.Arg(value = "info", optional = @Reflection.Optional("NULL")),
-        @Reflection.Arg(value = "password", optional = @Reflection.Optional("NULL"))})
+    @Signature({@Arg(value = "url"),
+        @Arg(value = "info", optional = @Optional("NULL")),
+        @Arg(value = "password", optional = @Optional("NULL"))})
     public static Memory getConnection(Environment env, Memory... args) {
         try {
             String url = args[0].toString();
@@ -70,7 +70,7 @@ public class DriverManagerWrapper extends BaseObject {
         }
     }
 
-    @Reflection.Signature({@Reflection.Arg(value = "url", type = HintType.STRING)})
+    @Signature({@Arg(value = "url")})
     public static Memory getDriver(Environment env, Memory... args) {
         try {
             Driver driver = DriverManager.getDriver(args[0].toString());
@@ -81,7 +81,7 @@ public class DriverManagerWrapper extends BaseObject {
         return Memory.NULL;
     }
 
-    @Reflection.Signature
+    @Signature
     public static Memory getDrivers(Environment env, Memory... args) {
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         ArrayMemory driversMemory = new ArrayMemory();
@@ -91,18 +91,18 @@ public class DriverManagerWrapper extends BaseObject {
         return driversMemory;
     }
 
-    @Reflection.Signature
+    @Signature
     public static Memory getLoginTimeout(Environment env, Memory... args) {
         return LongMemory.valueOf(DriverManager.getLoginTimeout());
     }
 
-    @Reflection.Signature({@Reflection.Arg(value = "message", type = HintType.STRING)})
+    @Signature({@Arg(value = "message")})
     public static Memory println(Environment env, Memory... args) {
         DriverManager.println(args[0].toString());
         return Memory.NULL;
     }
 
-    @Reflection.Signature({@Reflection.Arg(value = "seconds", type = HintType.INT)})
+    @Signature({@Arg(value = "seconds")})
     public static Memory setLoginTimeout(Environment env, Memory... args) {
         DriverManager.setLoginTimeout(args[0].toInteger());
         return Memory.NULL;
